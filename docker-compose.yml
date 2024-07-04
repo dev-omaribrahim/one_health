@@ -22,6 +22,7 @@ services:
       - db
     environment:
       - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@db:${DB_PORRT}/${DB_NAME}
+      - DB_HOST=db
 
   nginx:
     image: nginx:latest

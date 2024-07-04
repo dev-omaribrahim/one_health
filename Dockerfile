@@ -20,10 +20,10 @@ COPY . /app/
 RUN python manage.py collectstatic --noinput
 
 # Run migrations
-RUN python manage.py migrate 
+# RUN python manage.py migrate 
 
 # Expose port 8000
 EXPOSE 8000
 
 # Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "one_health_project.wsgi:application"]
+CMD ["./wait-for-it.sh", "db:5432", "--", "python", "manage.py", "migrate", "&&", "gunicorn", "--bind", "0.0.0.0:8000", "one_health_project.wsgi:application"]
