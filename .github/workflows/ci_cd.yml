@@ -25,11 +25,11 @@ jobs:
 
       - name: Set permissions for .env file
         run: |
-          chmod 600 ./one_health/.env
+          chmod 600 ./.env
           
       - name: Load .env file
         run: |
-          cp ./one_health/.env .env  # Copy .env.example to .env for testing purposes
+          cp ./.env .env  # Copy .env.example to .env for testing purposes
           source .env
 
       - name: Run tests
