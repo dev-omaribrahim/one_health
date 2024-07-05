@@ -23,14 +23,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set permissions for .env file
+      - name: Load .env file from EC2
         run: |
-          chmod 600 ./.env
-          
-      - name: Load .env file
-        run: |
-          cp ./.env .env  # Copy .env.example to .env for testing purposes
-          source .env
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-user@16.171.24.21 'cp /home/ec2-user/project/one_health/.env $GITHUB_WORKSPACE/.env'
 
       - name: Run tests
         run: |
@@ -44,6 +39,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Load .env file from EC2
+        run: |
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-user@16.171.24.21 'cp /home/ec2-user/project/one_health/.env $GITHUB_WORKSPACE/.env'
+          
       - name: Copy SSH key
         run: |
           mkdir -p ~/.ssh
