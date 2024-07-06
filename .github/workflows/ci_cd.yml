@@ -45,11 +45,10 @@ jobs:
 
       - name: Copy SSH key
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SECRETSSHEC2 }}" > ~/.ssh/id_rsa
+          echo "$SECRETSSHEC2" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Add SSH key to the agent.
+      - name: Add SSH key to the agent
         run: |
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
