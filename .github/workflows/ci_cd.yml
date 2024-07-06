@@ -49,7 +49,7 @@ jobs:
           echo "${{ secrets.SECRETSSHEC2 }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Add SSH key to the agent.
+      - name: Add SSH key to the agent
         run: |
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
