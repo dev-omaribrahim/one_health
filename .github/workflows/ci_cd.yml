@@ -10,6 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Create .env file b
+        run: |
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+          echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -29,15 +37,7 @@ jobs:
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "DEBUG=${{ secrets.DEBUG }}" >> .env
           echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
-          echo "DATABASE_URL=postgres://postgres:12345@127.0.0.1:5432/blog_db" >> .env
-
-      - name: Clear environment variables
-        run: |
-          unset DATABASE_URL
-
-      - name: Print DATABASE_URL
-        run: |
-          echo ${{ secrets.DATABASE_URL }}
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
       - name: Run tests
         run: |
