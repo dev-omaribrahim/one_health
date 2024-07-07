@@ -33,7 +33,7 @@ jobs:
 
       - name: Print DATABASE_URL
           run: |
-            echo ${{ secrets.DATABASE_URL }}
+            echo $DATABASE_URL
 
       - name: Run tests
         run: |
