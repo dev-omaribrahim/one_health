@@ -32,8 +32,8 @@ jobs:
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
       - name: Print DATABASE_URL
-          run: |
-            echo $DATABASE_URL
+        run: |
+          echo ${{ secrets.DATABASE_URL }}
 
       - name: Run tests
         run: |
