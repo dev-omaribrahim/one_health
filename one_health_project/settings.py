@@ -101,20 +101,10 @@ WSGI_APPLICATION = 'one_health_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-# DATABASES = {
-#     "default": env.db()
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'db_blog',
-        'USER': 'postgress',
-        'PASSWORD': '12345',
-        'HOST': '127.0.0.1',
-        'POST': '5432',
-    }
+    "default": env.db()
 }
+
 
 
 # Password validation
