@@ -31,6 +31,10 @@ jobs:
           echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
+      - name: Clear environment variables
+        run: |
+          unset DATABASE_URL
+
       - name: Print DATABASE_URL
         run: |
           echo ${{ secrets.DATABASE_URL }}
