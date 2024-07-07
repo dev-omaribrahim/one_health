@@ -25,5 +25,6 @@ urlpatterns = [
     path(f'{api_v1_prefix}/posts/', include('apps.posts.urls', namespace='posts')),
     path(f'{api_v1_prefix}/categories/', include('apps.categories.urls', namespace='categories')),
     path(f'{api_v1_prefix}/tags/', include('apps.tags.urls', namespace='tags')),
-    path(f'{api_v1_prefix}/profiles/', include('apps.profiles.urls', namespace='profiles'))
+    path(f'{api_v1_prefix}/profiles/', include('apps.profiles.urls', namespace='profiles')),
+    path(f'{api_v1_prefix}/auth/', include('apps.users_auth.urls')),
 ]
