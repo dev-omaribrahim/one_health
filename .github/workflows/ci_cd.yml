@@ -15,18 +15,16 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 12345
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         options: >-
-          --health-cmd "pg_isready -U test_user -d test_db"
+          --health-cmd "pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
-
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -40,27 +38,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Create .env file
+        run: |
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+          echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
-      # - name: Create .env file
-      #   run: |
-      #     echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-      #     echo "DEBUG=${{ secrets.DEBUG }}" >> .env
-      #     echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
-      #     echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
-      # - name: Run tests
-      #   run: |
-      #     python manage.py test
-
-      - name: Django Testing
-        env:
-          DEBUG: ${{ secrets.DEBUG }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      - name: Run tests
         run: |
           python manage.py test
 
