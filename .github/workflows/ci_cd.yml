@@ -12,12 +12,11 @@ jobs:
     services:
       postgres:
         image: postgres:16
-        ports:
-          - 5432:5432
         env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: django_db
+          POSTGRES_USER: django_user
+          POSTGRES_PASSWORD: django_password
+          POSTGRES_HOST_AUTH_METHOD: trust
         options: >-
           --health-cmd "pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}"
           --health-interval 10s
@@ -31,7 +30,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'  
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
@@ -43,10 +42,26 @@ jobs:
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "DEBUG=${{ secrets.DEBUG }}" >> .env
           echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "DB_NAME=${{ secrets.POSTGRES_DB }}" >> .env
+          echo "DB_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_PORT=5432" >> .env
 
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}; do
+            echo "Waiting for Postgres to be ready..."
+            sleep 5
+          done
 
       - name: Run tests
+        env:
+          DB_NAME: ${{ secrets.POSTGRES_DB }}
+          DB_USER: ${{ secrets.POSTGRES_USER }}
+          DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          DB_HOST: localhost
+          DB_PORT: 5432
         run: |
           python manage.py test
 
@@ -64,18 +79,18 @@ jobs:
           echo "${{ secrets.SECRETSSHEC2 }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Add SSH key to the agent.
+      - name: Add SSH key to the agent
         run: |
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
 
       - name: Set up known_hosts
         run: |
-          ssh-keyscan -H 16.171.24.21 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${SERVER_IP} >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/id_rsa ec2-user@16.171.24.21 << 'EOF'
+          ssh -i ~/.ssh/id_rsa ec2-user@${SERVER_IP} << 'EOF'
             cd /home/ec2-user/project/one_health
             git pull origin main
             docker-compose down -v
