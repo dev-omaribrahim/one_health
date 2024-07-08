@@ -104,6 +104,7 @@ WSGI_APPLICATION = 'one_health_project.wsgi.application'
 DATABASES = {
     "default": env.db()
 }
+
 # import dj_database_url
 
 # DATABASES['default'] = dj_database_url.config(
