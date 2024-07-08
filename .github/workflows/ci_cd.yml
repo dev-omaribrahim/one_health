@@ -47,7 +47,7 @@ jobs:
 
       - name: Run tests
         env:
-          DATABASE_URL: postgres://test_user:test_password@localhost:5432/test_db
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           python manage.py test
 
