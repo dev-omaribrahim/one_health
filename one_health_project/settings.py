@@ -101,9 +101,9 @@ WSGI_APPLICATION = 'one_health_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-# DATABASES = {
-#     # "default": env.db()
-# }
+DATABASES = {
+    "default": env.db()
+}
 # import dj_database_url
 
 # DATABASES['default'] = dj_database_url.config(
@@ -112,16 +112,16 @@ WSGI_APPLICATION = 'one_health_project.wsgi.application'
 # )
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('POSTGRES_DB'),
-        'USER': env('POSTGRES_USER'),
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'HOST': env('POSTGRES_HOST'),
-        'PORT': 5432
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('POSTGRES_DB'),
+#         'USER': env('POSTGRES_USER'),
+#         'PASSWORD': env('POSTGRES_PASSWORD'),
+#         'HOST': env('POSTGRES_HOST'),
+#         'PORT': 5432
+#     }
+# }
 
 
 # Password validation
