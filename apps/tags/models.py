@@ -6,6 +6,11 @@ class Tag(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True, null=True)
 
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'tag'
+        verbose_name_plural = 'tags'
+
     def save(self, *args, **kwargs):
         if not self.slug or Tag.objects.filter(name=self.name).exclude(pk=self.pk).exists():
             self.slug = slugify(self.name)
