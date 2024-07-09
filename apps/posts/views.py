@@ -1,15 +1,16 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from .models import Post, Comment
-from .serializers import PostSerializer, CommentSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from .models import Comment, Post
 from .permissions import IsOwnerOrReadOnly
+from .serializers import CommentSerializer, PostSerializer
 
 
 class PostListCreateAPIView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    search_fields = ['title', 'content']
-    filterset_fields = ['categories', 'tags']
+    search_fields = ["title", "content"]
+    filterset_fields = ["categories", "tags"]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
@@ -24,10 +25,10 @@ class CommentListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return Comment.objects.filter(post_id=self.kwargs['post_id'])
+        return Comment.objects.filter(post_id=self.kwargs["post_id"])
 
     def perform_create(self, serializer):
-        post = Post.objects.get(id=self.kwargs['post_id'])
+        post = Post.objects.get(id=self.kwargs["post_id"])
         serializer.save(post=post)
 
 
@@ -36,5 +37,4 @@ class CommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView)
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        return Comment.objects.filter(post_id=self.kwargs['post_id'])
-
+        return Comment.objects.filter(post_id=self.kwargs["post_id"])

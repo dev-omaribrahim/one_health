@@ -1,8 +1,9 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 from .models import Profile
-from .serializers import ProfileSerializer
 from .permissions import IsOwnerOrReadOnly
+from .serializers import ProfileSerializer
 
 
 class ProfileListCreateAPIView(generics.ListCreateAPIView):
@@ -15,4 +16,3 @@ class ProfileRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView)
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-

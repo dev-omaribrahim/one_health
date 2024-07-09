@@ -14,20 +14,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path, re_path, include
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
+from django.urls import include, path, re_path
 from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
-
-api_v1_prefix = 'api/v1'
+api_v1_prefix = "api/v1"
 
 
 schema_view = get_schema_view(
     openapi.Info(
         title="Blog API",
-        default_version='v1',
+        default_version="v1",
         description="API documentation for the Blog project",
         contact=openapi.Contact(email="contact@blog.local"),
         license=openapi.License(name="BSD License"),
@@ -38,15 +38,28 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path(f'{api_v1_prefix}/auth/', include('apps.users_auth.urls', namespace='auth')),
-    path(f'{api_v1_prefix}/posts/', include('apps.posts.urls', namespace='posts')),
-    path(f'{api_v1_prefix}/categories/', include('apps.categories.urls', namespace='categories')),
-    path(f'{api_v1_prefix}/tags/', include('apps.tags.urls', namespace='tags')),
-    path(f'{api_v1_prefix}/profiles/', include('apps.profiles.urls', namespace='profiles')),
-    path(f'{api_v1_prefix}/auth/', include('apps.users_auth.urls')),
-
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path("admin/", admin.site.urls),
+    path(f"{api_v1_prefix}/auth/", include("apps.users_auth.urls", namespace="auth")),
+    path(f"{api_v1_prefix}/posts/", include("apps.posts.urls", namespace="posts")),
+    path(
+        f"{api_v1_prefix}/categories/",
+        include("apps.categories.urls", namespace="categories"),
+    ),
+    path(f"{api_v1_prefix}/tags/", include("apps.tags.urls", namespace="tags")),
+    path(
+        f"{api_v1_prefix}/profiles/",
+        include("apps.profiles.urls", namespace="profiles"),
+    ),
+    path(f"{api_v1_prefix}/auth/", include("apps.users_auth.urls")),
+    re_path(
+        r"^swagger(?P<format>\.json|\.yaml)$",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
 ]
